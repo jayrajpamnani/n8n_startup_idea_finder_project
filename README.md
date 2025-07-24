@@ -3,6 +3,6 @@ Developed an automated workflow in n8n that scrapes specific subreddits to ident
 It could be tried with multiple subreddits (I tried with 3).
 
 Here's the Workflow diagram on n8n:
-n8n_workflow.png
+!n8n_workflow.png
 
 If you want to clone this diagram, go to this link: https://n8n.io/workflows/6094-generate-startup-ideas-from-reddit-posts-using-gemini-ai-and-google-sheets/
