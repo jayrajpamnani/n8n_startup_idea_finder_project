@@ -1,0 +1,437 @@
+{
+  "name": "Startup Idea Finder",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        -32
+      ],
+      "id": "9e795581-4dd3-4278-8e1c-516e3001c623",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "subreddit": "crazyideas",
+        "keyword": "Why is there no tool that",
+        "limit": 25,
+        "additionalFields": {
+          "sort": "comments"
+        }
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -32
+      ],
+      "id": "aa124d0e-e44b-4492-8543-564a52cbd1ce",
+      "name": "Search for a post",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "1eFnKn9bFvC1j9E7",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c53a68f5-c7c4-4825-a392-b233c875c123",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "74c7e5fd-39c8-4509-8c41-954c9c7c4f58",
+              "name": "selftext",
+              "value": "={{ $json.selftext }}",
+              "type": "string"
+            },
+            {
+              "id": "4740304d-6688-4dcd-8a1a-0a9ec65ace0c",
+              "name": "ups",
+              "value": "={{ $json.ups }}",
+              "type": "number"
+            },
+            {
+              "id": "94b8d977-c02f-4264-a95e-e982a13896ed",
+              "name": "created",
+              "value": "={{ $json.created }}",
+              "type": "number"
+            },
+            {
+              "id": "a9c6a0f7-f1a2-44eb-8310-ee4c9af904a0",
+              "name": "url",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        528,
+        0
+      ],
+      "id": "7618b37b-3a2e-4580-8766-1a5cd47b88af",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=A Reddit user posted the following in r/SomebodyMakeThis:\n\n---\n**Title**: {{ $json[\"title\"] }}\n\n**Post Text**: {{ $json[\"selftext\"] }}\n\n**Upvotes**: {{ $json[\"ups\"] }}\n**Post URL**: {{ $json[\"url\"] }}\n**Created Date**: {{ $json.created }}\n---\n\nBased on the above, please do the following:\n\n1. **Explain the core problem or frustration described in this post.**\n2. **Determine if any existing products, tools, or companies are actively solving this issue.**\n3. **If you can't find any known solution**, propose a startup idea or product that could effectively address this pain point.\n4. **Include what type of user would benefit**, and how the solution could make their life easier or more efficient.\n5. Also give an overview of implemnting this startup idea.\n\nBe as insightful and practical as possible.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        736,
+        96
+      ],
+      "id": "9a87fc5f-ff6b-4ce7-8f1b-464648e8fce8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-flash-8b-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        736,
+        256
+      ],
+      "id": "e7171285-6aa3-4350-a7df-0a0db1e17eb5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "lTf4CVQ5s3mEcfCx",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZXqM2wYrj0VGJ4VBzLE0dFnI5HvEsKYotIWSpl3yNhc",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Startup Ideas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Post Text",
+              "displayName": "Post Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Upvotes",
+              "displayName": "Upvotes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created Date",
+              "displayName": "Created Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Gemini Analysis",
+              "displayName": "Gemini Analysis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1248,
+        16
+      ],
+      "id": "fb4f68a4-8996-491b-9903-d44c9095dd9b",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Qj0cwVQDK1xNoY9W",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1088,
+        16
+      ],
+      "id": "89d2a259-f98a-4b99-aba8-7b975df2fc73",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "subreddit": "Lightbulb",
+        "keyword": "Why is there no tool that",
+        "limit": 25,
+        "additionalFields": {
+          "sort": "comments"
+        }
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        80,
+        128
+      ],
+      "id": "6ab04a50-69e9-45f6-a8c9-67c9152512ac",
+      "name": "Search for a post1",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "1eFnKn9bFvC1j9E7",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "subreddit": "sidehustle",
+        "keyword": "Why is there no tool that",
+        "limit": 25,
+        "additionalFields": {
+          "sort": "top"
+        }
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -208
+      ],
+      "id": "8d44deac-326e-458f-999a-ef42fb6fbeba",
+      "name": "Search for a post2",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "1eFnKn9bFvC1j9E7",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        304,
+        -16
+      ],
+      "id": "3ec10e7d-2139-499b-a5f2-11f4c828f604",
+      "name": "Merge1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Search for a post",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search for a post1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search for a post2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search for a post": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search for a post1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Search for a post2": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "47c34c69-6825-44d5-a7ef-aa237c1dbf66",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "96a4f4beffb9432f6f91fb6becfdf95892f0838e71a959bba6fd497f9b9d4b56"
+  },
+  "id": "QWYRjUQ5Svb4LLvh",
+  "tags": []
+}
