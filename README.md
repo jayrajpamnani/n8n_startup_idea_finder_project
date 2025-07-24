@@ -4,6 +4,6 @@ It could be tried with multiple subreddits (I tried with 3).
 
 Here's the Workflow diagram on n8n:
 
-[!n8n_workflow.png](https://github.com/jayrajpamnani/n8n_startup_idea_finder_project/blob/main/n8n_workflow.png?raw=true)
+[n8n_workflow.png](https://github.com/jayrajpamnani/n8n_startup_idea_finder_project/blob/main/n8n_workflow.png?raw=true)
 
 If you want to clone this diagram, go to this link: https://n8n.io/workflows/6094-generate-startup-ideas-from-reddit-posts-using-gemini-ai-and-google-sheets/
